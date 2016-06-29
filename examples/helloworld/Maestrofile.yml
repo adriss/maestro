@@ -1,0 +1,38 @@
+service:
+  name: TemplateGenerator
+    version: 1.0
+    template: |
+      <!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">
+      <HTML>
+        <HEAD>
+          <TITLE>
+            Hello World!
+          </TITLE>
+        </HEAD>
+        <BODY>
+          <P>Hello %{name}!</P> 
+          <FORM ACTION="hello">
+            <LABEL FOR="name">Please enter your name</LABEL><BR/>
+            <INPUT TYPE="text" NAME="name"/>
+            <INPUT TYPE="submit" VALUE="Say Hello"/>
+          </FORM>
+        </BODY>
+      </HTML>
+    activators:
+      - input-channel: *hello_world_validated
+
+service:
+  name: RegexValidator
+  version: 1.0
+  validate:
+    - name: ${regexp}
+  activators:
+    - input-channel: *hello_world
+    - output-channel: *hello_world_validated
+
+channel: &hello_world_validated
+channel: &hello_world
+
+http:
+  path: /hello_world
+  channel: *hello_world
